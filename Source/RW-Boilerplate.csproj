@@ -22,4 +22,10 @@
     <PackageReference Include="Krafs.Rimworld.Ref" Version="1.5.4104" />
     <PackageReference Include="Lib.Harmony" Version="2.3.3" />
   </ItemGroup>
+
+  <ItemGroup>
+		<Reference Include="Newtonsoft.Json">
+		<HintPath>Assemblies\Newtonsoft.Json.dll</HintPath>
+		</Reference>
+	</ItemGroup>
 </Project>

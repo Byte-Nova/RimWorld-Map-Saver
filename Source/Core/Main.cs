@@ -1,34 +1,41 @@
 ﻿using System.Globalization;
+using System.IO;
 using System.Reflection;
 using HarmonyLib;
 using Verse;
 
-namespace RWBoilerplate
+public static class Main
 {
-    public static class Main
+    [StaticConstructorOnStartup]
+    private static class MapSaver
     {
-        [StaticConstructorOnStartup]
-        private static class YourModNameHere
+        static MapSaver()
         {
-            static YourModNameHere()
-            {
-                ApplyHarmonyPathches();
-                PrepareCulture();
-            }
+            ApplyHarmonyPathches();
+            PrepareCulture();
+            PreparePaths();
         }
+    }
 
-        private static void ApplyHarmonyPathches()
-        {
-            Harmony harmony = new Harmony(Master.modName);
-            harmony.PatchAll(Assembly.GetExecutingAssembly());
-        }
+    private static void ApplyHarmonyPathches()
+    {
+        Harmony harmony = new Harmony(Master.modName);
+        harmony.PatchAll(Assembly.GetExecutingAssembly());
+    }
 
-        public static void PrepareCulture()
-        {
-            CultureInfo.CurrentCulture = new CultureInfo("en-US", false);
-            CultureInfo.CurrentUICulture = new CultureInfo("en-US", false);
-            CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US", false);
-            CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-US", false);
-        }
+    public static void PrepareCulture()
+    {
+        CultureInfo.CurrentCulture = new CultureInfo("en-US", false);
+        CultureInfo.CurrentUICulture = new CultureInfo("en-US", false);
+        CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US", false);
+        CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-US", false);
+    }
+
+    private static void PreparePaths()
+    {
+        Master.mainPath = GenFilePaths.SaveDataFolderPath;
+
+        Master.modFolderPath = Path.Combine(Master.mainPath, "Map Saver");
+        if (!Directory.Exists(Master.modFolderPath)) Directory.CreateDirectory(Master.modFolderPath);
     }
 }
