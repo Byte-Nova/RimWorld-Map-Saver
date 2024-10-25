@@ -1,0 +1,16 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "dotnet: build mod",
+			"type": "dotnet",
+			"task": "build ${workspaceFolder}/RW-Boilerplate.csproj",
+			"problemMatcher": [],
+			"group":
+			{
+				"kind": "build",
+				"isDefault": true
+			},
+		}
+	]
+}
