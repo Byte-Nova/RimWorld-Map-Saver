@@ -59,12 +59,11 @@ DisplayEndingOptions()
 {
     echo "Please enter your choice:";
     echo;
-    options=("Start RimWorld" "Multi-start RimWorld" "Exit")
+    options=("Start RimWorld" "Exit")
     select opt in "${options[@]}"
     do
         case $opt in
             "Start RimWorld") StartGame; break;;
-            "Multi-start RimWorld") MultiStartGame; break;;
             "Exit") exit; break;;
             *) echo "invalid option '$REPLY'";;
         esac
