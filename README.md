@@ -1,2 +1,2 @@
-# Rimworld-Map-Saver
+# RimWorld-Map-Saver
 ## Source files for the mod
