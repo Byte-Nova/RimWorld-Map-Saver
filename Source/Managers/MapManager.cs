@@ -56,7 +56,11 @@ public static class MapManager
 
     public static void OpenMapSaver()
     {
-        if (Current.ProgramState != ProgramState.Playing) return;
+        if (Current.ProgramState != ProgramState.Playing)
+        {
+            Find.WindowStack.Add(new MessageWindow("You must be playing to use this feature!"));
+        }
+
         else
         {
             string title = "Save Map";
@@ -68,7 +72,11 @@ public static class MapManager
 
     public static void OpenMapLoader()
     {
-        if (Current.ProgramState != ProgramState.Playing) return;
+        if (Current.ProgramState != ProgramState.Playing)
+        {
+            Find.WindowStack.Add(new MessageWindow("You must be playing to use this feature!"));
+        }
+
         else
         {
             string title = "Map Loader";
@@ -79,7 +87,11 @@ public static class MapManager
 
     public static void OpenMapDeleter(int mapIndex)
     {
-        if (Current.ProgramState != ProgramState.Playing) return;
+        if (Current.ProgramState != ProgramState.Playing)
+        {
+            Find.WindowStack.Add(new MessageWindow("You must be playing to use this feature!"));
+        }
+
         else
         {
             string description = "Are you sure you want to delete this map?";
@@ -90,7 +102,11 @@ public static class MapManager
 
     public static void OpenMapRenamer(int mapIndex)
     {
-        if (Current.ProgramState != ProgramState.Playing) return;
+        if (Current.ProgramState != ProgramState.Playing)
+        {
+            Find.WindowStack.Add(new MessageWindow("You must be playing to use this feature!"));
+        }
+
         else
         {
             string title = "Rename Map";

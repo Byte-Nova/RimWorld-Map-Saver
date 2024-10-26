@@ -37,7 +37,7 @@ public static class MapScribeManager
     private static void GetMapSize(MapFile mapFile, Map map)
     {
         try { mapFile.Size = ValueParser.IntVec3ToArray(map.Size); }
-        catch (Exception e) { Logger.Warning(e.ToString()); }
+        catch (Exception e) { Logger.Warning(e.ToString(), Logger.LogImportance.Verbose); }
     }
 
     private static void GetMapTerrain(MapFile mapFile, Map map)
@@ -64,7 +64,7 @@ public static class MapScribeManager
 
             mapFile.Tiles = toGet.ToArray();
         }
-        catch (Exception e) { Logger.Warning(e.ToString()); }
+        catch (Exception e) { Logger.Warning(e.ToString(), Logger.LogImportance.Verbose); }
     }
 
     private static void GetMapThings(MapFile mapFile, Map map)
@@ -91,7 +91,7 @@ public static class MapScribeManager
 
             mapFile.Things = thingsToAdd.ToArray();
         }
-        catch (Exception e) { Logger.Warning(e.ToString()); }
+        catch (Exception e) { Logger.Warning(e.ToString(), Logger.LogImportance.Verbose); }
     }
 
     private static Map SetEmptyMap(MapFile mapFile)
@@ -121,20 +121,20 @@ public static class MapScribeManager
                         map.terrainGrid.SetTerrain(vectorToCheck, terrainToUse);
                         map.pollutionGrid.SetPolluted(vectorToCheck, component.IsPolluted);
                     }
-                    catch (Exception e) { Logger.Warning(e.ToString()); }
+                    catch (Exception e) { Logger.Warning(e.ToString(), Logger.LogImportance.Verbose); }
 
                     try
                     {
                         RoofDef roofToUse = DefDatabase<RoofDef>.AllDefs.FirstOrDefault(fetch => fetch.defName == component.RoofDefName);
                         map.roofGrid.SetRoof(vectorToCheck, roofToUse);
                     }
-                    catch (Exception e) { Logger.Warning(e.ToString()); }
+                    catch (Exception e) { Logger.Warning(e.ToString(), Logger.LogImportance.Verbose); }
 
                     index++;
                 }
             }
         }
-        catch (Exception e) { Logger.Warning(e.ToString()); }
+        catch (Exception e) { Logger.Warning(e.ToString(), Logger.LogImportance.Verbose); }
     }
 
     private static void SetMapThings(MapFile mapFile, Map map)
@@ -155,10 +155,10 @@ public static class MapScribeManager
 
                     GenPlace.TryPlaceThing(toGet, toGet.Position, map, ThingPlaceMode.Direct, rot: toGet.Rotation);
                 }
-                catch (Exception e) { Logger.Warning(e.ToString()); }
+                catch (Exception e) { Logger.Warning(e.ToString(), Logger.LogImportance.Verbose); }
             }
         }
-        catch (Exception e) { Logger.Warning(e.ToString()); }
+        catch (Exception e) { Logger.Warning(e.ToString(), Logger.LogImportance.Verbose); }
     }
 
     private static void SetMapFog(Map map)
@@ -178,6 +178,6 @@ public static class MapScribeManager
             map.roofCollapseBuffer.Clear();
             map.roofGrid.Drawer.SetDirty();
         }
-        catch (Exception e) { Logger.Warning(e.ToString()); }         
+        catch (Exception e) { Logger.Warning(e.ToString(), Logger.LogImportance.Verbose); }         
     }
 }
