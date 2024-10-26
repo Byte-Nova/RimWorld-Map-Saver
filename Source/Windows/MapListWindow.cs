@@ -54,9 +54,8 @@ public class MapListingWindow : Window
         
         FillMainRect(new Rect(0f, descriptionLineDif2 + 10f, rect.width, rect.height - normalButton.y - 85f));
 
-        if (Widgets.ButtonText(new Rect(new Vector2(centeredX - normalButton.x / 2, rect.yMax - normalButton.y), normalButton), "OK"))
+        if (Widgets.ButtonText(new Rect(new Vector2(centeredX - normalButton.x / 2, rect.yMax - normalButton.y), normalButton), "Close"))
         {
-            //
             Close();
         }
     }
@@ -97,7 +96,6 @@ public class MapListingWindow : Window
         if (Widgets.ButtonText(new Rect(new Vector2(rect.xMax - selectButton.x, rect.yMax - selectButton.y), selectButton), "X"))
         {
             MapManager.OpenMapDeleter(index);
-            Close();
         }
 
         if (Widgets.ButtonText(new Rect(new Vector2(rect.xMax - (selectButton.x * 2), rect.yMax - selectButton.y), selectButton), "R"))

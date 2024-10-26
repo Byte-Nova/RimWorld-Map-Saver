@@ -10,15 +10,20 @@ public static class MapManager
     public static void SaveMap(Map map, string saveName)
     {
         MapFile toSave = MapScribeManager.MapToString(map);
+
+        CompressedFile compressedFile = new CompressedFile();
+        compressedFile.Contents = GZip.Compress(Serializer.ConvertObjectToBytes(toSave));
+
         string location = Path.Combine(Master.modFolderPath, saveName + mapExtension);
-        Serializer.SerializeToFile(location, toSave);
+        Serializer.SerializeToFile(location, compressedFile);
 
         Find.WindowStack.Add(new MessageWindow("Map was saved correctly!"));
     }
 
     public static void LoadMap(string path)
     {
-        MapFile toLoad = Serializer.SerializeFromFile<MapFile>(path);
+        CompressedFile compressedFile = Serializer.SerializeFromFile<CompressedFile>(path);
+        MapFile toLoad = Serializer.ConvertBytesToObject<MapFile>(GZip.Decompress(compressedFile.Contents));
 
         if (ValueParser.ArrayToIntVec3(toLoad.Size) != Find.CurrentMap.Size)
         {
