@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using HarmonyLib;
+using UnityEngine;
 using Verse;
 
 public static class Main
@@ -14,6 +15,8 @@ public static class Main
             ApplyHarmonyPathches();
             PrepareCulture();
             PreparePaths();
+
+            DisplayLoadMessage();
         }
     }
 
@@ -23,13 +26,15 @@ public static class Main
         harmony.PatchAll(Assembly.GetExecutingAssembly());
     }
 
-    public static void PrepareCulture()
+    private static void PrepareCulture()
     {
         CultureInfo.CurrentCulture = new CultureInfo("en-US", false);
         CultureInfo.CurrentUICulture = new CultureInfo("en-US", false);
         CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US", false);
         CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-US", false);
     }
+
+    private static void DisplayLoadMessage() { Logger.Message("Mod loaded correctly!"); }
 
     private static void PreparePaths()
     {

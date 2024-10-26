@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using UnityEngine;
 using Verse;
 
@@ -18,6 +19,7 @@ public class ModWindow : Mod
         listingStandard.Label("Map Loader");
         if (listingStandard.ButtonTextLabeled("Save the map you are currently at", "Save")) { MapManager.OpenMapSaver(); }
         if (listingStandard.ButtonTextLabeled("Load a map from the list of saved ones", "Load")) { MapManager.OpenMapLoader(); }
+        if (listingStandard.ButtonTextLabeled("Open maps folder", "Open")) { Process.Start(Master.modFolderPath); }
 
         listingStandard.GapLine();
         listingStandard.Label("Experimental");
