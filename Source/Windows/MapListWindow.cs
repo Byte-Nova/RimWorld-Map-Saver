@@ -96,6 +96,7 @@ public class MapListingWindow : Window
         if (Widgets.ButtonText(new Rect(new Vector2(rect.xMax - selectButton.x, rect.yMax - selectButton.y), selectButton), "X"))
         {
             MapManager.OpenMapDeleter(index);
+            Close();
         }
 
         if (Widgets.ButtonText(new Rect(new Vector2(rect.xMax - (selectButton.x * 2), rect.yMax - selectButton.y), selectButton), "R"))
