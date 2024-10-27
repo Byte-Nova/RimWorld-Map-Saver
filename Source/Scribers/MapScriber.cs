@@ -4,7 +4,7 @@ using System.Linq;
 using RimWorld;
 using Verse;
 
-public static class MapScribeManager
+public static class MapScriber
 {
     public static MapFile MapToString(Map map)
     {
@@ -16,16 +16,24 @@ public static class MapScribeManager
 
         GetMapThings(mapFile, map);
 
+        GetMapHumans(mapFile, map);
+
+        GetMapAnimals(mapFile, map);
+
         return mapFile;
     }
 
-    public static Map StringToMap(MapFile mapFile)
+    public static Map StringToMap(MapFile mapFile, bool containsPawns)
     {
         Map map = SetEmptyMap(mapFile);
 
         SetMapTerrain(mapFile, map);
 
         SetMapThings(mapFile, map);
+
+        if (containsPawns) SetMapHumans(mapFile, map);
+
+        if (containsPawns) SetMapAnimals(mapFile, map);
 
         SetMapFog(map);
 
@@ -71,13 +79,13 @@ public static class MapScribeManager
     {
         try 
         {
-            List<ThingFile> thingsToAdd = new List<ThingFile>();
+            List<ItemFile> thingsToAdd = new List<ItemFile>();
 
             foreach (Thing thing in map.listerThings.AllThings)
             {
                 if (!ScribeHelper.CheckIfThingIsHuman(thing) && !ScribeHelper.CheckIfThingIsAnimal(thing))
                 {
-                    ThingFile thingData = ThingScribeManager.ItemToString(thing, thing.stackCount);
+                    ItemFile thingData = ItemScriber.ItemToString(thing, thing.stackCount);
                     
                     if (ScribeHelper.CheckIfThingCanGrow(thing))
                     {
@@ -90,6 +98,52 @@ public static class MapScribeManager
             }
 
             mapFile.Things = thingsToAdd.ToArray();
+        }
+        catch (Exception e) { Logger.Warning(e.ToString(), Logger.LogImportance.Verbose); }
+    }
+
+    private static void GetMapHumans(MapFile mapFile, Map map)
+    {
+        try 
+        {
+            List<HumanFile> tempHumans = new List<HumanFile>();
+
+            foreach (Thing thing in map.listerThings.AllThings)
+            {
+                if (ScribeHelper.CheckIfThingIsHuman(thing))
+                {
+                    if (thing.Faction == Faction.OfPlayer)
+                    {
+                        HumanFile humanData = HumanScriber.HumanToString(thing as Pawn);
+                        tempHumans.Add(humanData);
+                    }
+                }
+            }
+
+            mapFile.Humans = tempHumans.ToArray();
+        }
+        catch (Exception e) { Logger.Warning(e.ToString(), Logger.LogImportance.Verbose); }
+    }
+
+    private static void GetMapAnimals(MapFile mapFile, Map map)
+    {
+        try 
+        {
+            List<AnimalFile> tempAnimals = new List<AnimalFile>();
+
+            foreach (Thing thing in map.listerThings.AllThings)
+            {
+                if (ScribeHelper.CheckIfThingIsAnimal(thing))
+                {
+                    if (thing.Faction == Faction.OfPlayer)
+                    {
+                        AnimalFile animalData = AnimalScriber.AnimalToString(thing as Pawn);
+                        tempAnimals.Add(animalData);   
+                    }
+                }
+            }
+
+            mapFile.Animals = tempAnimals.ToArray();
         }
         catch (Exception e) { Logger.Warning(e.ToString(), Logger.LogImportance.Verbose); }
     }
@@ -141,11 +195,11 @@ public static class MapScribeManager
     {
         try
         {
-            foreach (ThingFile item in mapFile.Things)
+            foreach (ItemFile item in mapFile.Things)
             {
                 try
                 {
-                    Thing toGet = ThingScribeManager.StringToItem(item);
+                    Thing toGet = ItemScriber.StringToItem(item);
 
                     if (ScribeHelper.CheckIfThingCanGrow(toGet))
                     {
@@ -154,6 +208,40 @@ public static class MapScribeManager
                     }
 
                     GenPlace.TryPlaceThing(toGet, toGet.Position, map, ThingPlaceMode.Direct, rot: toGet.Rotation);
+                }
+                catch (Exception e) { Logger.Warning(e.ToString(), Logger.LogImportance.Verbose); }
+            }
+        }
+        catch (Exception e) { Logger.Warning(e.ToString(), Logger.LogImportance.Verbose); }
+    }
+
+    private static void SetMapHumans(MapFile mapFile, Map map)
+    {
+        try
+        {
+            foreach (HumanFile pawn in mapFile.Humans)
+            {
+                try
+                {
+                    Pawn human = HumanScriber.StringToHuman(pawn);
+                    GenSpawn.Spawn(human, human.Position, map, human.Rotation);
+                }
+                catch (Exception e) { Logger.Warning(e.ToString(), Logger.LogImportance.Verbose); }
+            }
+        }
+        catch (Exception e) { Logger.Warning(e.ToString(), Logger.LogImportance.Verbose); }
+    }
+
+    private static void SetMapAnimals(MapFile mapFile, Map map)
+    {
+        try
+        {
+            foreach (AnimalFile pawn in mapFile.Animals)
+            {
+                try
+                {
+                    Pawn animal = AnimalScriber.StringToAnimal(pawn);
+                    GenSpawn.Spawn(animal, animal.Position, map, animal.Rotation);
                 }
                 catch (Exception e) { Logger.Warning(e.ToString(), Logger.LogImportance.Verbose); }
             }

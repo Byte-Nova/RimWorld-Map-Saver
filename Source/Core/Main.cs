@@ -2,7 +2,6 @@
 using System.IO;
 using System.Reflection;
 using HarmonyLib;
-using UnityEngine;
 using Verse;
 
 public static class Main
@@ -34,8 +33,6 @@ public static class Main
         CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-US", false);
     }
 
-    private static void DisplayLoadMessage() { Logger.Message("Mod loaded correctly!"); }
-
     private static void PreparePaths()
     {
         Master.mainPath = GenFilePaths.SaveDataFolderPath;
@@ -43,4 +40,6 @@ public static class Main
         Master.modFolderPath = Path.Combine(Master.mainPath, "Map Saver");
         if (!Directory.Exists(Master.modFolderPath)) Directory.CreateDirectory(Master.modFolderPath);
     }
+
+    private static void DisplayLoadMessage() { Logger.Message("Mod loaded correctly!"); }
 }

@@ -4,5 +4,9 @@ public class MapFile
 
     public TileComponent[] Tiles = new TileComponent[0];
 
-    public ThingFile[] Things;
+    public ItemFile[] Things = new ItemFile[0];
+
+    public HumanFile[] Humans = new HumanFile[0];
+
+    public AnimalFile[] Animals = new AnimalFile[0];
 }

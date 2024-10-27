@@ -95,19 +95,22 @@ public class MapListingWindow : Window
 
         if (Widgets.ButtonText(new Rect(new Vector2(rect.xMax - selectButton.x, rect.yMax - selectButton.y), selectButton), "X"))
         {
-            MapManager.OpenMapDeleter(index);
+            MapManager.selectedMapPath = Directory.GetFiles(Master.modFolderPath)[index];
+            MapManager.OpenMapDeleter();
             Close();
         }
 
         if (Widgets.ButtonText(new Rect(new Vector2(rect.xMax - (selectButton.x * 2), rect.yMax - selectButton.y), selectButton), "R"))
         {
-            MapManager.OpenMapRenamer(index);
+            MapManager.selectedMapPath = Directory.GetFiles(Master.modFolderPath)[index];
+            MapManager.OpenMapRenamer();
             Close();
         }
 
         if (Widgets.ButtonText(new Rect(new Vector2(rect.xMax - (selectButton.x * 3), rect.yMax - selectButton.y), selectButton), "L"))
         {
-            MapManager.LoadMap(Directory.GetFiles(Master.modFolderPath)[index]);
+            MapManager.selectedMapPath = Directory.GetFiles(Master.modFolderPath)[index];
+            MapManager.OpenMapPawnQuestion();
             Close();
         }
     }

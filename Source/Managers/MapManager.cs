@@ -7,9 +7,11 @@ public static class MapManager
 {
     private static readonly string mapExtension = ".map";
 
+    public static string selectedMapPath;
+
     public static void SaveMap(Map map, string saveName)
     {
-        MapFile toSave = MapScribeManager.MapToString(map);
+        MapFile toSave = MapScriber.MapToString(map);
 
         CompressedFile compressedFile = new CompressedFile();
         compressedFile.Contents = GZip.Compress(Serializer.ConvertObjectToBytes(toSave));
@@ -20,7 +22,7 @@ public static class MapManager
         Find.WindowStack.Add(new MessageWindow("Map was saved correctly!"));
     }
 
-    public static void LoadMap(string path)
+    public static void LoadMap(string path, bool loadPawns)
     {
         CompressedFile compressedFile = Serializer.SerializeFromFile<CompressedFile>(path);
         MapFile toLoad = Serializer.ConvertBytesToObject<MapFile>(GZip.Decompress(compressedFile.Contents));
@@ -36,9 +38,9 @@ public static class MapManager
 
             RemoveOldMap(Find.CurrentMap);
 
-            MapScribeManager.StringToMap(toLoad);
+            MapScriber.StringToMap(toLoad, loadPawns);
 
-            foreach (Pawn pawn in toRecover) GenSpawn.Spawn(pawn, pawn.Position, Find.CurrentMap, pawn.Rotation);
+            if (!loadPawns) foreach (Pawn pawn in toRecover) GenSpawn.Spawn(pawn, pawn.Position, Find.CurrentMap, pawn.Rotation);
 
             Find.WindowStack.Add(new MessageWindow("Map was loaded correctly!"));
         }
@@ -85,7 +87,7 @@ public static class MapManager
         }
     }
 
-    public static void OpenMapDeleter(int mapIndex)
+    public static void OpenMapDeleter()
     {
         if (Current.ProgramState != ProgramState.Playing)
         {
@@ -95,12 +97,12 @@ public static class MapManager
         else
         {
             string description = "Are you sure you want to delete this map?";
-            Action toDo = delegate { DeleteMap(Directory.GetFiles(Master.modFolderPath)[mapIndex]); };
+            Action toDo = delegate { DeleteMap(selectedMapPath); };
             Find.WindowStack.Add(new YesNoWindow(description, toDo));
         }
     }
 
-    public static void OpenMapRenamer(int mapIndex)
+    public static void OpenMapRenamer()
     {
         if (Current.ProgramState != ProgramState.Playing)
         {
@@ -111,8 +113,24 @@ public static class MapManager
         {
             string title = "Rename Map";
             string description = "Type the new map name";
-            Action toDo = delegate { RenameMap(Directory.GetFiles(Master.modFolderPath)[mapIndex], PromptWindow.windowAnswer); };
+            Action toDo = delegate { RenameMap(selectedMapPath, PromptWindow.windowAnswer); };
             Find.WindowStack.Add(new PromptWindow(title, description, toDo));
+        }
+    }
+
+    public static void OpenMapPawnQuestion()
+    {
+        if (Current.ProgramState != ProgramState.Playing)
+        {
+            Find.WindowStack.Add(new MessageWindow("You must be playing to use this feature!"));
+        }
+
+        else
+        {
+            string description = "Replace your pawns with this map ones?";
+            Action answerYes = delegate { LoadMap(selectedMapPath, true); };
+            Action answerNo = delegate { LoadMap(selectedMapPath, false); };
+            Find.WindowStack.Add(new YesNoWindow(description, answerYes, answerNo));
         }
     }
 

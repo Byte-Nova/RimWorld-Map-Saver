@@ -1,4 +1,4 @@
-public class ThingFile
+public class ItemFile
 {
     public string DefName;
 
